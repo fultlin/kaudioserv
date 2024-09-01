@@ -1,0 +1,40 @@
+version: '3.5' 
+
+services: 
+  nest_postgres: 
+    container_name: kaudioserv 
+    image: postgres:14 
+    environment:  # Исправлено здесь
+      POSTGRES_USER: kaudioserv 
+      POSTGRES_PASSWORD: kaudioserv 
+      PGDATA: /data/postgres 
+    volumes: 
+      - postgres:/kaudioserv/docker-volumes/postgres 
+    ports: 
+      - 5432:5432 
+    networks: 
+      - kaudioserv 
+    restart: unless-stopped 
+
+  nest_pgadmin: 
+    container_name: kaudioserv_pgadmin 
+    image: dpage/pgadmin4 
+    environment:  # Исправлено здесь
+      PGADMIN_DEFAULT_EMAIL: kaudioserv@admin.com 
+      PGADMIN_DEFAULT_PASSWORD: kaudioserv 
+      PGADMIN_CONFIG_SERVER_MODE: 'False' 
+    volumes: 
+      - pgadmin:/kaudioserv/docker-volumes/pgadmin  # Исправлено здесь
+    ports: 
+      - 127.0.0.1:5050:80 
+    networks: 
+      - kaudioserv 
+    restart: unless-stopped 
+
+networks: 
+  kaudioserv: 
+    driver: bridge 
+
+volumes: 
+  postgres: 
+  pgadmin:
