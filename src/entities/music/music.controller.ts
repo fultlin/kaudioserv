@@ -41,15 +41,16 @@ export class MusicController {
   }
 
   @Get('/stream/:filename')
-  streamFile(@Param('filename') filename: string, @Res() res: Response) {
-    const filePath = join(__dirname, '../../uploads', filename)
-    res.sendFile(filePath)
+  async streamFile(@Param('filename') filename: string, @Res() res: Response) {
+    await this.musicService.downloadTrack(filename);
+    const filePath = join(__dirname, '../../download', filename);
+    res.sendFile(filePath);
   }
 
   @Get('/:track')
   async getTrack(@Param('track') track: string, @Res() res: Response) {
-    const tracks = await this.musicService.findMusic(track)
+    const tracks = await this.musicService.findMusic(track);
 
-    return res.send({'traks': tracks})
+    return res.send({ traks: tracks });
   }
 }
